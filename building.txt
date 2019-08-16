@@ -5,7 +5,7 @@ Notes on how to obtain and build projects required by xtwsd
 Needed XTide libraries:
 From https://flaterco.com/xtide/files.html
 libtcd
-Resulting include: /usr/local/(include/tcd.h
+Resulting include: /usr/local/include/tcd.h
 
 libxtide
 Resulting includes: /usr/local/include/libxtide/*.hh
@@ -27,7 +27,6 @@ Building XTide libraries:
 Building libtcd:
 ---------------
 cd /my/project/directories
-sudo -s
 tar xvf xtide/libtcd-2.2.7-r2.tar.bz2
 cd libtcd-2.2.7/
 ./configure
