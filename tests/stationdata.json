@@ -1,0 +1,147 @@
+{
+    "comments": "",
+    "country": "Bahamas",
+    "harmonics": {
+        "confidence": 10,
+        "constituents": [
+            {   
+                "name": "M2",
+                "amp": 1.329,
+                "epoch": 10.6 
+            },
+            {   
+                "name": "S2",
+                "amp": 0.23,
+                "epoch": 36.6 
+            },
+            {   
+                "name": "N2",
+                "amp": 0.305,
+                "epoch": 349.8 
+            },
+            {   
+                "name": "K1",
+                "amp": 0.22,
+                "epoch": 197.1 
+            },
+            {   
+                "name": "O1",
+                "amp": 0.151,
+                "epoch": 199.2 
+            },
+            {   
+                "name": "NU2",
+                "amp": 0.062,
+                "epoch": 350.0 
+            },
+            {   
+                "name": "MU2",
+                "amp": 0.043,
+                "epoch": 350.2 
+            },
+            {   
+                "name": "2N2",
+                "amp": 0.043,
+                "epoch": 330.7 
+            },
+            {   
+                "name": "OO1",
+                "amp": 0.007,
+                "epoch": 194.9 
+            },
+            {   
+                "name": "LAM2",
+                "amp": 0.01,
+                "epoch": 22.6 
+            },
+            {   
+                "name": "M1",
+                "amp": 0.01,
+                "epoch": 198.1 
+            },
+            {   
+                "name": "J1",
+                "amp": 0.013,
+                "epoch": 196.0 
+            },
+            {   
+                "name": "MM",
+                "amp": 0.023,
+                "epoch": 351.3
+            },
+            {   
+                "name": "SSA",
+                "amp": 0.105,
+                "epoch": 8.2 
+            },
+            {   
+                "name": "SA",
+                "amp": 0.269,
+                "epoch": 167.7 
+            },
+            {   
+                "name": "MF",
+                "amp": 0.026,
+                "epoch": 323.8 
+            },
+            {   
+                "name": "RHO",
+                "amp": 0.007,
+                "epoch": 200.0 
+            },
+            {   
+                "name": "Q1",
+                "amp": 0.03,
+                "epoch": 200.1 
+            },
+            {   
+                "name": "T2",
+                "amp": 0.013,
+                "epoch": 36.5 
+            },
+            {   
+                "name": "R2",
+                "amp": 0.003,
+                "epoch": 36.6 
+            },
+            {   
+                "name": "2Q1",
+                "amp": 0.003,
+                "epoch": 201.2 
+            },
+            {   
+                "name": "P1",
+                "amp": 0.069,
+                "epoch": 197.2 
+            },
+            {   
+                "name": "L2",
+                "amp": 0.036,
+                "epoch": 31.3 
+            },
+            {   
+                "name": "K2",
+                "amp": 0.059,
+                "epoch": 36.6 
+            }
+        ],
+        "datum": "Mean Lower Low Water",
+        "datumOffset": 1.47,
+        "zoneOffset": 0
+    },
+    "levelUnits": "feet",
+    "name": "Settlement Point Bahamas",
+    "notes": "",
+    "position": {
+        "lat": 26.710,
+        "long": -78.99666667
+    },
+    "referenceStation": true,
+    "source": {
+        "context": "NOS",
+        "name": "xtwsd",
+        "stationId": "9710441"
+    },
+    "timezone": ":America/New_York",
+    "type": "tide"
+}

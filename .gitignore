@@ -1,0 +1,47 @@
+# Ignore everything that is created by running autoreconf, configure.ac or make.
+
+# No leading slash means ignore these FILES no matter in which directory they
+# appear. Yes, we ignore Makefiles and 'configure' scripts because they are all
+# generated for us!
+*.exe
+*.o
+Makefile
+Makefile.in
+TAGS
+aclocal.m4
+compile
+config.h
+config.h.in
+config.log
+config.status
+configure
+depcomp
+install-sh
+missing
+stamp-h1
+tags
+test-driver
+
+# Ditto, but trailing slash means this is a DIRECTORY.
+.deps/
+autom4te.cache/
+
+# A leading slash means "relative to the root only".
+/debug/
+!/debug/debugconfigure
+/tests/*.log
+/tests/*.trs
+
+
+# CMake stuff
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps

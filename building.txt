@@ -1,0 +1,87 @@
+Notes on how to obtain and build projects required by xtwsd
+===========================================================
+
+
+Needed XTide libraries:
+From https://flaterco.com/xtide/files.html
+libtcd
+Resulting include: /usr/local/(include/tcd.h
+
+libxtide
+Resulting includes: /usr/local/include/libxtide/*.hh
+
+Needed C++ REST library (restbed)
+From https://github.com/Corvusoft/restbed
+Resulting includes: usr/local/include/corvusoft/restbed/*.hpp
+
+Needed Json library
+From https://github.com/nlohmann/json
+Resulting include: /usr/local/include/nlohmann/json.hpp
+
+
+
+
+Building XTide libraries:
+===========================
+
+Building libtcd:
+---------------
+cd /my/project/directories
+sudo -s
+tar xvf xtide/libtcd-2.2.7-r2.tar.bz2
+cd libtcd-2.2.7/
+./configure
+make
+sudo make install
+
+
+Building XTide, xttpd, and tide:
+--------------------------------
+cd /my/project/directories
+tar xvf xtide/xtide-2.15.2.tar.bz2
+cd xtide-2.15.2/
+
+--On Linux/Raspian--
+sudo apt-get install libxaw7-dev
+dpkg -L libxaw7-dev
+./configure --with-xttpd-user=pi --with-xttpd-group=users --enable-systemd
+
+--On OS X--
+export CPPFLAGS=-I/opt/X11/include
+export LDFLAGS=-L/opt/X11/lib
+./configure
+
+---Either platform---
+make
+sudo make install
+
+
+
+Building restbed
+-------------------------
+cd /my/project/directories
+git clone --recursive https://github.com/corvusoft/restbed.git
+mkdir restbed/build
+cd restbed/build
+cmake -DBUILD_SSL=NO ..
+make install
+
+
+nlohmann::json
+----------------------------------
+The nlohmann::json library is a single include file that is included and compiled
+along with xtwsd.  Simply place the json.hpp file in your global include
+directory:
+/usr/local/include/nlohmann/json.hpp
+
+
+
+
+Building xtwsd
+----------------------------------
+cd /my/project/directories
+git clone --recursive https://github.com/joelkoz/xtwsd.git
+mkdir xtwsd/build
+cd xtwsd/build
+cmake ..
+make install
