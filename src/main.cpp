@@ -402,7 +402,7 @@ void get_tcd_handler( const shared_ptr< Session > session )
 int main(const int argc, const char** argv)
 {
 
-    printf("xtwsd v1.0\n");
+    printf("xtwsd v0.1\n");
 
     int port = 8080;
     if (argc >= 2) {

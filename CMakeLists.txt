@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(XTideService)
-set (XTideService_VERSION_MAJOR 1)
-set (XTideService_VERSION_MINOR 0)
+set (XTideService_VERSION_MAJOR 0)
+set (XTideService_VERSION_MINOR 1)
 set (CMAKE_CXX_STANDARD 11)
 
 #Bring the headers into the project
