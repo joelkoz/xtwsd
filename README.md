@@ -1,9 +1,9 @@
 # xtwsd 
-> Json Web Service for XTide
+Json Web Service for XTide
 =======================
 
 ---
-xtwsd stands for "Xtide Web Service Daemon", and provides a json based RESTful API to David Flater's famous [XTide tide prediction software.](https://flaterco.com/xtide/index.html)
+xtwsd stands for "XTide Web Service Daemon", and provides a json based RESTful API to David Flater's famous [XTide tide prediction software.](https://flaterco.com/xtide/index.html)
 
 Features
 -------
@@ -22,8 +22,7 @@ downloading and building them from source.
 |---------|----------|-------------|
 | XTide   | The primary workhorse of this project, XTide's libxtide library provides the actual prediction calculations and data. | https://flaterco.com/xtide/files.html |
 | libtcd  | libtcd is a library that gives access to XTide's low level data (harmonics database) | https://flaterco.com/xtide/files.html |
-| nlohmann::json | Excellent json library for C++ | (
-    https://github.com/nlohmann/json |
+| nlohmann::json | Excellent json library for C++ | https://github.com/nlohmann/json |
 | restbed | RESTful framework for C++ | https://github.com/Corvusoft/restbed |
 
 
@@ -37,13 +36,29 @@ building.txt for help building the various source projects.
 Running
 -----------
 Be sure you have also downloaded a harmonics data file from the [FlaterCo web site](https://flaterco.com/xtide/files.html). Per the XTide
-specifications, you must then specify the path where your harmonics file is stored in either the environment variable *HFILE_PATH*, or the file */etc/xtide.conf*.  Finally, run xtwsd with the command:  *xtwsd &amp;lt;port&amp;gt;*
+specifications, you must then specify the path where your harmonics file is stored in either the environment variable *HFILE_PATH*, or the file */etc/xtide.conf*.  Finally, run xtwsd with the command:  *xtwsd &lt;port&gt;*
 
 Example:
 
 ```
 xtwsd 8080
 ```
+
+
+Station Index vs. Station Id
+-----------------------------
+The XTide project (and in turn, the libxtide libraries) references stations using a number called an "index."  This index
+is an index into an internal cache of stations. The biggest problem with using this index to uniquely identify a station is
+that is can change when new station data is added to the database. The tcd library keeps stations alphabetized and that
+sorting affects the index number.  For this reason, whenever possible, *xtwsd* uses a synthesized id that is in the format ```<source.context>:<source.stationId>```. Each tide and current station record has a "source context" that identifies where
+the prediction data came from.  For example "NOS" is the United States' National Oceanic Service, which is a department within
+the National Oceanic and Atmosopheric Administration (NOAA). The NOS uses its own system to identify its stations.  For example, 
+the station id 8723178 is the station at Government Cut, Miami Florida.  The "Station id" used by *xtwsd* thus would be
+```NOS:8723178```.  Using this as an identifier ensures the station is uniquely identified between database updates. 
+
+In the resource paths below, where you see {*stationId*}, you can in fact use either the station Id or the station index. Just
+be aware that if you are using xtwsd in an environment where the station data may be added to or updated, the station index
+for any given station may change following such updates.
 
 
 Resource paths
@@ -74,7 +89,7 @@ the returned list to reference stations only.
 
 Example:
 ```
-http://127.0.0.1:8080/nearest/tide?lat=26.2567&amp;lng=-80.08&amp;count=10&amp;referenceOnly=1
+http://127.0.0.1:8080/nearest/tide?lat=26.2567&lng=-80.08&count=10&referenceOnly=1
 ```
 
 
@@ -86,7 +101,7 @@ If *detailed=1*, predictions will include events such as sunrise, and moonrise, 
 
 Example
 ```
-http://127.0.0.1:8080/location/NOS:8722862?start=2019-08-15 12:00 am EDT&amp;local=1&amp;detailed=1
+http://127.0.0.1:8080/location/NOS:8722862?start=2019-08-15 12:00 am EDT&local=1&detailed=1
 ```
 
 ### GET /graph/{*stationId*}&lt;?start=YYYY-MM-DD HH:MM ZZZ&gt;&lt;&amp;width=*n*&gt;&lt;&amp;height=*n*&gt;
@@ -95,7 +110,7 @@ Returns an SVG graph of the tide or current predictions for the specified statio
 
 Example
 ```
-http://127.0.0.1:8080/graph/NOS:8722862?start=2019-08-15 12:00 am EDT&amp;width=1200&amp;height=600
+http://127.0.0.1:8080/graph/NOS:8722862?start=2019-08-15 12:00 am EDT&width=1200&height=600
 ```
 
 
