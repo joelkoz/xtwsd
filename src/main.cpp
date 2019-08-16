@@ -399,10 +399,16 @@ void get_tcd_handler( const shared_ptr< Session > session )
 
 
 
-int main( const int, const char** )
+int main(const int argc, const char** argv)
 {
 
     printf("xtwsd v1.0\n");
+
+    int port = 8080;
+    if (argc >= 2) {
+        port = stoi(argv[1]);
+    }
+
     Service service;
 
     auto resource = make_shared< Resource >( );
@@ -447,10 +453,10 @@ int main( const int, const char** )
 
 
     auto settings = make_shared< restbed::Settings >( );
-    settings->set_port( 8081 );
+    settings->set_port(port);
     settings->set_default_header( "Connection", "close" );
     
-    printf("Starting web service...\n");
+    printf("Starting web service on port %d\n", port);
     service.start( settings );
     
     return EXIT_SUCCESS;
