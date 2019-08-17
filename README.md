@@ -10,7 +10,7 @@ Features
 
 * Retrieve tide and current predictions in json and svg format 
 * Search for stations closest to a specific lat/long 
-* Add new reference and subordinate stations via a Json PUT 
+* Add new reference and subordinate stations via a Json POST
 
 
 Requirements
@@ -136,11 +136,11 @@ http://127.0.0.1:8080/harmonics/schema
 ```
 
 
-### PUT /harmonics
+### POST /harmonics
 
-Allows new prediction data to be added to the database. The Json object sent with the PUT request should match the Json Schema
+Allows new prediction data to be added to the database. The Json object sent with the POST request should match the Json Schema
 returned by *GET /harmonics/schema*.  If you are updating an existing record, be sure the *index* property is populated. For
-adding new records, *index* should be omitted, or set to "-1".  The response to the put will be a Json object with the following
+adding new records, *index* should be omitted, or set to "-1".  The response to the POST will be a Json object with the following
 structure:
 
 ```
