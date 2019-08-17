@@ -107,6 +107,15 @@ extern const std::string& getStationId(int stationNdx);
  */
 extern bool stationIndexValid(int stationNdx);
 
+
+
+/**
+ * Updates the context map for the specified stationId/stationIndex pair. This
+ * should be called whenever a new record is added to the database.
+ */
+extern void updateContextMap(const std::string& stationId, int stationIndex);
+
+
 }
 
 #endif

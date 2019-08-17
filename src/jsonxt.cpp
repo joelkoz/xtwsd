@@ -1,5 +1,7 @@
 #include "jsonxt.h"
 
+#include <string>
+
 #include "xtutil.h"
 #include "stdcapture.h"
 
@@ -341,6 +343,8 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
 
         TIDE_RECORD rec;
 
+        string stationId;
+
         // Initialize rec with old data, or blank for new records...
         if (recordNum >= 0) {
             if (read_tide_record(recordNum, &rec) == -1) {
@@ -367,8 +371,10 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
             setString(rec.source, sizeof(rec.source), s, "name");
             setString(rec.station_id_context, sizeof(rec.station_id_context), s, "context");
             setString(rec.station_id, sizeof(rec.station_id), s, "stationId");
+            stationId = rec.station_id_context;
+            stationId += ":";
+            stationId += rec.station_id;
         }
-
 
         if (j.count("position")) {
             json& pos = j["position"];
@@ -457,10 +463,29 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
             }
         }
 
+        if (stationId.empty()) {
+            status["statusCode"] = 400;
+            status["message"] = "The properties 'source.context' and 'source.stationId' must be set";
+            return false;
+        }
+
+        int preExistingIndex = xtutil::getStationIndex(stationId);
+
         StdCapture captureOutput;
         captureOutput.beginCapture();
         if (recordNum >= 0) {
             // Update an existing record...
+            if (stationIndex != preExistingIndex) {
+                status["statusCode"] = 400;
+                string msg = stationId;
+                msg += " has a pre-existing index of ";
+                msg += to_string(preExistingIndex);
+                msg += " which does not match the specified index ";
+                msg += to_string(stationIndex);
+                status["message"] = msg;
+                return false;
+            }
+
             if (update_tide_record(recordNum, &rec, &db)) {
                 status["statusCode"] = 200;
                 status["index"] = stationIndex;
@@ -481,6 +506,17 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
         }
         else {
             // Add a new record...
+            if (preExistingIndex != -1) {
+                status["statusCode"] = 400;
+                string msg = "Station id ";
+                msg += stationId;
+                msg += " already exists in database (index  ";
+                msg += to_string(preExistingIndex);
+                msg += "). Updates require 'index' property to be specifid";
+                status["message"] = msg;
+                return false;
+            }
+
             if (add_tide_record(&rec, &db)) {
                 // Update libxtide's interal C++ structure for the newly added record...
                 StationRef *sr = new StationRef (pRef->harmonicsFileName,
@@ -499,6 +535,9 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
 
                 status["statusCode"] = 200;
                 status["index"] = sr->rootStationIndexIndex;
+
+                xtutil::updateContextMap(stationId, sr->rootStationIndexIndex);
+
                 close_tide_db();
                 return true;
             }

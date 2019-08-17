@@ -154,7 +154,7 @@ void getJsonSchema(json& schema) {
         addProperty(source, "context", "string", "Name of government agency, company, etc. that supplied the data");
         addProperty(source, "name", "string", "Name of how the data was obtained from the context");
         addProperty(source, "stationId", "string", "How does this data source identify this particular station");
-
+        source["required"] = { "context", "stationId" };
 
         auto& harmonics = addObjectProperty(schema, "harmonics", "Data required for reference tide and current stations");
         addNumberProperty(harmonics, "confidence", "integer", confidenceText);
@@ -188,28 +188,28 @@ void getJsonSchema(json& schema) {
         json combo1;
         combo1["if"]["properties"]["type"]["const"] = "tide";
         combo1["if"]["properties"]["referenceStation"]["const"] = true;
-        combo1["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "harmonics" };
+        combo1["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "harmonics", "source" };
         schema["allOf"] += combo1;
 
 
         json combo2;
         combo2["if"]["properties"]["type"]["const"] = "tide";
         combo2["if"]["properties"]["referenceStation"]["const"] = false;
-        combo2["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "offsets" };
+        combo2["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "offsets", "source" };
         schema["allOf"] += combo2;
 
 
         json combo3;
         combo3["if"]["properties"]["type"]["const"] = "current";
         combo3["if"]["properties"]["referenceStation"]["const"] = true;
-        combo3["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "harmonics", "flow" };
+        combo3["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "harmonics", "flow", "source" };
         schema["allOf"] += combo3;
 
 
         json combo4;
         combo4["if"]["properties"]["type"]["const"] = "current";
         combo4["if"]["properties"]["referenceStation"]["const"] = false;
-        combo4["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "offsets", "flow" };
+        combo4["then"]["required"] = {  "name", "type", "position", "timezone", "levelUnits", "offsets", "flow", "source" };
         schema["allOf"] += combo4;
 
 

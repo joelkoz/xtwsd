@@ -142,6 +142,15 @@ map<string, int>* getContextMap() {
 }
 
 
+
+void xtutil::updateContextMap(const string& stationId, int stationIndex) {
+    getContextMap();
+    (*pContextMap)[stationId] = stationIndex;
+    (*pIndexMap)[stationIndex] = stationId;
+}
+
+
+
 int xtutil::getStationIndex(const Dstr &harmonicsFileName, const uint32_t hFileRecordNumber) {
 
    StationIndex& stations = Global::stationIndex();
