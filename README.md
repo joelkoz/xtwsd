@@ -23,7 +23,8 @@ downloading and building them from source.
 | XTide   | The primary workhorse of this project, XTide's libxtide library provides the actual prediction calculations and data. | https://flaterco.com/xtide/files.html |
 | libtcd  | libtcd is a library that gives access to XTide's low level data (harmonics database) | https://flaterco.com/xtide/files.html |
 | nlohmann::json | Excellent json library for C++ | https://github.com/nlohmann/json |
-| restbed | RESTful framework for C++ | https://github.com/Corvusoft/restbed |
+| served | RESTful framework for C++ | https://github.com/meltwater/served |
+| boost | C++ library used by served | https://www.boost.org/ |
 
 
 
@@ -152,7 +153,7 @@ structure:
 
 Example
 ```
-$ curl -vX PUT http://127.0.0.1:8080/harmonics -d @stationdata.json \
+$ curl -vX POST http://127.0.0.1:8080/harmonics -d @stationdata.json \
 --header "Content-Type: application/json"
 ```
 
