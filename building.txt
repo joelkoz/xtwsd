@@ -56,14 +56,28 @@ sudo make install
 
 
 
-Building restbed
+Building boost
 -------------------------
 cd /my/project/directories
-git clone --recursive https://github.com/corvusoft/restbed.git
-mkdir restbed/build
-cd restbed/build
-cmake -DBUILD_SSL=NO ..
-make install
+tar zxvf ~/Downloads/boost_1_70_0.tar.gz
+cd boost_1_70_0
+./bootstrap.sh -with-libraries=system
+./b2
+
+
+Building served
+--------------------------
+cd /my/project/directories
+tar zxvf ~/Downloads/served-1.6.0.tar.gz
+cd served-1.6.0
+mkdir served.build
+cd served.build
+cmake -Wno-dev -DSERVED_BUILD_STATIC=ON -DSERVED_BUILD_SHARED=OFF -DSERVED_BUILD_TESTS=OFF -DSERVED_BUILD_EXAMPLES=OFF ..
+make
+sudo make install
+
+
+
 
 
 nlohmann::json
