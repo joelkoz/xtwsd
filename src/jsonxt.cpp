@@ -326,10 +326,15 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
     if (j.count("index") && j["index"].is_number()) {
         // An index was specified - this is possibly an update?
         stationIndex = j["index"].get<int>();
-        if (stationIndex >= 0) {
-            pRef = stations[stationIndex];
-            recordNum = pRef->recordNumber;
-        }
+    }
+
+    if (j.count("id")) {
+        stationIndex = xtutil::getStationIndex(j["id"].get<string>());
+    }
+
+    if (xtutil::stationIndexValid(stationIndex)) {
+        pRef = stations[stationIndex];
+        recordNum = pRef->recordNumber;
     }
 
     if (recordNum == -1) {
