@@ -47,4 +47,5 @@ CTestTestfile.cmake
 _deps
 
 /build/xtwsd
+/build/nos2xt
 /build/test-xtwsd

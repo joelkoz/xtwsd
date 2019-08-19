@@ -236,17 +236,6 @@ NV_INT32 getEnumProperty(json& j, const char* propertyName, std::function<NV_INT
     }
 }
 
-void setString(char* str, int strSize, json& j, const char* propertyName) {
-    if (j.count(propertyName)) {
-        strncpy(str, j[propertyName].get<string>().c_str(), strSize);
-        // Guarantee str is zero terminated...
-        str[strSize-1] = 0;
-    }
-    else {
-        str[0] = 0;
-    }
-}
-
 
 int updateStationIndex(TIDE_RECORD& rec) {
 
@@ -259,53 +248,6 @@ int updateStationIndex(TIDE_RECORD& rec) {
 }
 
 
-int getInt(json& j, const char* propertyName) {
-
-    if (j.count(propertyName) && j[propertyName].is_number()) {
-        return j[propertyName].get<int>();
-    }
-    else {
-        return 0;
-    }
-
-}
-
-
-double getNum(json& j, const char* propertyName) {
-
-    if (j.count(propertyName) &&  j[propertyName].is_number()) {
-        return j[propertyName].get<double>();
-    }
-    else {
-        return 0.0;
-    }
-
-}
-
-
-bool getBool(json& j, const char* propertyName) {
-
-    if (j.count(propertyName) &&  j[propertyName].is_boolean()) {
-        return j[propertyName].get<bool>();
-    }
-    else {
-        return false;
-    }
-}
-
-
-string getStr(json& j, const char* propertyName) {
-
-    if (j.count(propertyName)) {
-        return j[propertyName].get<string>();
-    }
-    else {
-        return "";
-    }
-}
-
-
-
 string fmtString(const char* fmt, int num) {
     char* s = new char[strlen(fmt)+20];
     sprintf(s, fmt, num);
@@ -314,6 +256,8 @@ string fmtString(const char* fmt, int num) {
     return str;
 }
 
+
+#include "jutil.hpp"
 
 bool setStationHarmonicsFromJson(json& j, json& status) {
 
@@ -541,7 +485,7 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
                 status["statusCode"] = 200;
                 status["index"] = sr->rootStationIndexIndex;
 
-                xtutil::updateContextMap(stationId, sr->rootStationIndexIndex);
+                xtutil::invalidateContextMap();
 
                 close_tide_db();
                 return true;
