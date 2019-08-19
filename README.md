@@ -25,13 +25,14 @@ downloading and building them from source.
 | nlohmann::json | Excellent json library for C++ | https://github.com/nlohmann/json |
 | served | RESTful framework for C++ | https://github.com/meltwater/served |
 | boost | C++ library used by served | https://www.boost.org/ |
-
+| openssl | SSL library needed by nos2xt utility | https://www.openssl.org/source/ |
 
 
 Building
 ----------
 After installing and building the development builds of the above mentioned projects, you build xtwsd using CMake. See the file
 building.txt for help building the various source projects.
+
 
 
 Running
@@ -44,6 +45,15 @@ Example:
 ```
 xtwsd 8080
 ```
+
+
+nos2xt utility
+---------------
+The United States National Oceanic and Atmospheric Administration (NOAA) provides public harmonics data via a web service interface for stations it maintains in the USA and parts of the Carribean.  The stations from the USA are part of the harmonics database provided on the FlaterCo web site, but other stations in the Carribean are not.  The utility nos2xt, (source code in src/util) can make calls to the
+public web service maintained by NOAA and make web service calls
+to your local xtwsd server to add those additional stations.  That code also serves as a good example on how to
+use the xtwsd services for adding new data to the server using data you may find in other locations.
+
 
 
 Station Index vs. Station Id

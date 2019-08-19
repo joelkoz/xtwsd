@@ -1,0 +1,23 @@
+#
+# Station Ids for Bahamas
+# Source: https://tidesandcurrents.noaa.gov/tide_predictions.html?gid=1536
+#
+9710441
+TEC4609
+TEC4611
+TEC4613
+TEC4615
+TEC4617
+TEC4619
+TEC4621
+TEC4623
+TEC4625
+TEC4627
+TEC4629
+TEC4631
+TEC4633
+TEC4635
+TEC4637
+TEC4639
+TEC4641
+TEC4643

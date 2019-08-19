@@ -143,10 +143,14 @@ map<string, int>* getContextMap() {
 
 
 
-void xtutil::updateContextMap(const string& stationId, int stationIndex) {
-    getContextMap();
-    (*pContextMap)[stationId] = stationIndex;
-    (*pIndexMap)[stationIndex] = stationId;
+void xtutil::invalidateContextMap() {
+
+    if (pContextMap != NULL) {
+        delete pContextMap;
+        pContextMap = NULL;
+        delete pIndexMap;
+        pIndexMap = NULL;
+    }
 }
 
 

@@ -24,7 +24,7 @@ using json = nlohmann::json;
   * -------------------------------------
   * 
   * This is the "main" module and contains all of the RESTful resource
-  * definitions using the "restbed" framework.
+  * definitions using the "served" framework.
   * 
   * @author Joel Kozikowski
   */
@@ -470,7 +470,7 @@ void get_tcd_handler(served::response& res, const served::request& req)
 int main(const int argc, const char** argv)
 {
 
-    printf("xtwsd v0.1\n");
+    printf("xtwsd v0.2\n");
 
     const char* port = "8080";
     if (argc >= 2) {
