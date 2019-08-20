@@ -54,6 +54,19 @@ const char* NOS_HOST = "tidesandcurrents.noaa.gov";
 #include <iostream>
 
 
+// This is a TOTAL hack, but it saves an uncessary lookup.  Set
+// "lastRefCountry" to the "country" code of the reference station.
+// This needs to be done either when "stationExists()" is called and
+// it finds one, or when a reference station is added to the database
+// for the first time.
+string lastRefCountry = "";
+
+// If a country has been specified to be used, use that instead of
+// what is found from the NOS web site or from the reference
+// station.
+string specifiedCountry = "";
+
+
 // Convert the station data in jstat into an XTide time zone
 string getTzName(json& jstat) {
 
@@ -113,20 +126,16 @@ int getXTimeOffset(json& j, const char* name) {
 
 }
 
-// This is a TOTAL hack, but it saves an uncessary lookup.  Set
-// "lastRefCountry" to the "country" code of the reference station.
-// This needs to be done either when "stationExists()" is called and
-// it finds one, or when a reference station is added to the database
-// for the first time.
-string lastRefCountry = "";
 
 // Return TRUE if the specified stationId already exists in the XTide
 // database
-bool stationExists(const string& stationId, const char* port) {
+bool stationExists(const string& stationId, const char* port, bool silent=false) {
 
     HttpClient http("127.0.0.1", "http", port);
 
-    printf("Checking for existence of reference station %s - ", stationId.c_str());
+    if (!silent) {
+        printf("Checking for existence of reference station %s - ", stationId.c_str());
+    }
 
     string path = "/harmonics/";
     path += stationId;
@@ -134,7 +143,10 @@ bool stationExists(const string& stationId, const char* port) {
     std::shared_ptr<HttpClient::Response> pResp = http.get(path);
 
     bool exists = pResp->ok();
-    printf("%s\n", (exists ? "already exists" : "not in database"));
+
+    if (!silent) {
+        printf("%s\n", (exists ? "already exists" : "not in database"));
+    }
 
     if (exists) {
         json jref = pResp->asJson();
@@ -151,10 +163,15 @@ int postXTide(json& jxt, const char* port) {
 
     printf("Posting new data to XTide Web Service...\n");
 
-    if (getStr(jxt, "country") != "USA") {
-        // For non-USA stations, append the country to the name.
-        string newName = getStr(jxt, "name") + ", " + getStr(jxt, "country");
-        jxt["name"] = newName;
+    string country = getStr(jxt, "country");
+    if (country != "USA") {
+        // For non-USA stations, append the country to the name if it is
+        // not there already
+        string oldName = getStr(jxt, "name");
+        if (oldName.find(country) == std::string::npos) {
+            string newName = oldName + ", " + country;
+            jxt["name"] = newName;
+        }
     }
 
     printf("%s\n", jxt.dump(2).c_str());
@@ -182,7 +199,17 @@ int postXTide(json& jxt, const char* port) {
 
 
 // Convert NOS data to XTide
-int convertStation(const string stationId, const char* port) {
+int convertStation(const string stationId, const char* port, bool skipExisting) {
+
+
+    if (skipExisting) {
+        string fullId = "NOS:";
+        fullId += stationId;
+        if (stationExists(fullId, port, true)) {
+            printf("Station Id %s already exists in XTide - skipping.", stationId.c_str());
+            return EXIT_SUCCESS;
+        }
+    }
 
     HttpClient https(NOS_HOST, "https");
 
@@ -220,18 +247,23 @@ int convertStation(const string stationId, const char* port) {
 
         json pos;
         pos["lat"] = jstat["lat"];
-        pos["lng"] = jstat["lng"];
+        pos["long"] = jstat["lng"];
         jxt["position"] = pos;
 
 
 
-        string state = getStr(jstat,"state");
-        if (state.length() == 2) {
-            jxt["country"] = "USA";
-            jxt["name"] = getStr(jstat, "name") + ", " + getStr(jstat, "state");
+        if (!specifiedCountry.empty()) {
+            jxt["country"] = specifiedCountry;
         }
         else {
-            jxt["country"] = state;
+            string state = getStr(jstat,"state");
+            if (state.length() == 2) {
+                jxt["country"] = "USA";
+                jxt["name"] = getStr(jstat, "name") + ", " + getStr(jstat, "state");
+            }
+            else {
+                jxt["country"] = state;
+            }
         }
 
         jxt["timezone"] = getTzName(jstat);
@@ -265,7 +297,6 @@ int convertStation(const string stationId, const char* port) {
                     }
                 }
                 jxtharm["constituents"] = jxtconst;
-                jxt["harmonics"] = jxtharm;
 
                 printf("Retrieving datum values for reference station...\n");
                 path = base;
@@ -276,7 +307,8 @@ int convertStation(const string stationId, const char* port) {
                     json jdatums = jresp["datums"];
                     double mlw = getDatumVal(jdatums, "MLW");
                     double mllw = getDatumVal(jdatums, "MLLW");
-                    jxtharm["datumOffset"] = mlw = mllw;
+                    jxtharm["datumOffset"] = mlw - mllw;
+                    jxt["harmonics"] = jxtharm;
 
                     return postXTide(jxt, port);
                 }
@@ -315,14 +347,19 @@ int convertStation(const string stationId, const char* port) {
 
                 if (!stationExists(fullRefStationId, port)) {
                     printf("Adding reference station data to database...\n");
-                    if (convertStation(refStationId, port) == EXIT_FAILURE) {
+                    if (convertStation(refStationId, port, false) == EXIT_FAILURE) {
                         printf("Adding reference station failed. Aborting.\n");
                         return EXIT_FAILURE;
                     }
                 }
 
-                // Make sure country matches that of primary station...
-                jxt["country"] = lastRefCountry;
+                if (!specifiedCountry.empty()) {
+                    jxt["country"] = specifiedCountry;
+                }
+                else {
+                    // Make sure country matches that of primary station...
+                    jxt["country"] = lastRefCountry;
+                }
 
                 return postXTide(jxt, port);
 
@@ -342,43 +379,87 @@ int convertStation(const string stationId, const char* port) {
 
 }
 
+
+void printUsage() {
+    printf("Usage: nos2xt [stationId|-f stationListFileName] <-p xtwsd_server_port> <-c countryNameToUse> <-u>\n");
+    printf("   -f nnnnn Process a list of NOS station Ids from the text file nnnn\n");
+    printf("   -p pppp Port number of xtwsd web service daemon (default 8080)\n");
+    printf("   -c nnnn Force the country name to be nnnn\n");
+    printf("   -u Update station Id(s) even if it already exists in database (default NO)\n");
+    printf("      ^Warning! '-u' option may crash sever due to possible bug in libtcd\n");
+    printf("   example:s\n");
+    printf("      nos2xt 9710441 -p 8080\n\n");
+    printf("      nos2xt -f my_station_list.txt -p 8080\n\n");
+}
+
+
 int main(const int argc, const char** argv)
 {
 
     printf("nos2xt v0.2\n");
 
-    int maxArg = 3;
     string stationId;
     string fName;
+    const char* port = "8080";
+    char invalidArg = 0;
+    bool skipExisting = true;
 
-    if (argc >= 2) {
-        stationId = argv[1];
-    }
+    int a = 1;
+    while (a < argc) {
+        if (argv[a][0] == '-') {
+            switch (argv[a][1]) {
+                case 'p':
+                    if (a+1 < argc) {
+                        port = argv[a+1];
+                    }
+                    a += 2;
+                    break;
+                case 'f':
+                    if (a+1 < argc) {
+                        fName = argv[a+1];
+                    }
+                    a += 2;
+                    break;
 
-    if (stationId == "-f") {
-        maxArg = 4;
-        stationId = "";
-        if (argc >= 3) {
-            fName = argv[2];
+                case 'c':
+                    if (a+1 < argc) {
+                        specifiedCountry = argv[a+1];
+                    }
+                    a += 2;
+                    break;
+
+                case 'u':
+                    skipExisting = false;
+                    a++;
+                    break;
+
+                default:
+                    invalidArg = argv[a][1];
+                    a++;
+            }
+        }
+        else {
+            stationId = argv[a];
+            a++;
         }
     }
 
-    const char* port = "8080";
-    if (argc >= maxArg) {
-        port = argv[maxArg-1];
+
+    if (invalidArg != 0) {
+        printf("Invalid argument: %c\n", invalidArg);
+        printUsage();
+        return EXIT_FAILURE;
     }
-
-
-    if (fName.length() > 0) {
+    else if (fName.length() > 0) {
         printf("Processing input file %s\n", fName.c_str());
 
         std::ifstream infile(fName);
         int lineNum = 0;
         while (std::getline(infile, stationId)) {
             lineNum++;
-            if (stationId.substr(0,1) != "#") {
+            if (stationId.substr(0,1) != "#" && stationId.substr(0,1) != "@") {
                 // Not a comment - assume its a station Id...
-                int result = convertStation(stationId, port);
+                int result = convertStation(stationId, port, skipExisting);
                 if (result == EXIT_SUCCESS) {
                     printf("\n\n");
                 }
@@ -387,18 +468,25 @@ int main(const int argc, const char** argv)
                     return EXIT_FAILURE;
                 }
             }
+            else {
+                if (stationId.substr(0,1) == "@") {
+                    // This is a specified country
+                    specifiedCountry = stationId.substr(1);
+                    printf("Using country name '%s'\n", specifiedCountry.c_str());
+                }
+                else {
+                    printf("%s\n", stationId.c_str());
+                }
+            }
         } // while
 
         printf("\nDone. %d lines processed.\n", lineNum);
     }
     else if (stationId.length() > 0) {
-       return convertStation(stationId, port);
+       return convertStation(stationId, port, skipExisting);
     }
     else {
-        printf("Usage: nos2xt [stationId|-f stationListFileName] <xtwsd_server_port>\n");
-        printf("   example:s\n");
-        printf("      nos2xt 9710441 8080\n\n");
-        printf("      nos2xt -f my_station_list.txt 8080\n\n");
+        printUsage();
         return EXIT_FAILURE;
     }
 

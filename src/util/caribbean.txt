@@ -1,0 +1,177 @@
+#
+# Station Ids for Caribbean Islands
+#
+# From https://tidesandcurrents.noaa.gov/tide_predictions.html?gid=1750#listing
+#
+# @ as first character indicates country code to send to XTide
+#
+# ----------------
+#  Bermuda Islands
+# ----------------
+@Bermuda
+2695540
+TEC4605
+2695535
+# ----------------
+#  Bahamas
+# ----------------
+@Bahamas
+9710441
+TEC4609
+TEC4611
+TEC4613
+TEC4615
+TEC4617
+TEC4619
+TEC4621
+TEC4623
+TEC4625
+TEC4627
+TEC4629
+TEC4631
+TEC4633
+TEC4635
+TEC4637
+TEC4639
+TEC4641
+# ----------------
+#  Turks & Caicos
+# ----------------
+@Turks & Caicos Is
+TEC4643
+# ----------------
+#  Cuba
+# ----------------
+@Cuba
+TEC4645
+TEC4647
+TEC4649
+TEC4651
+TEC4653
+TEC4655
+TEC4657
+TEC4659
+TEC4661
+TEC4663
+TEC4665
+TEC4667
+TEC4669
+TEC4671
+TEC4673
+TEC4675
+TEC4677
+TEC4679
+TEC4681
+TEC4683
+TEC4685
+TEC4687
+TEC4689
+TEC4691
+TEC4693
+# ----------------
+#  Jamaica
+# ----------------
+@Jamaica
+TEC4695
+TEC4697
+TEC4701
+TEC4703
+TEC4705
+TEC4707
+# ----------------
+#  Haiti
+# ----------------
+@Haiti
+TEC4709
+TEC4711
+TEC4727
+# ----------------
+#  Dominican Republic
+# ----------------
+@Dominican Republic
+TEC4713
+TEC4715
+TEC4717
+TEC4723
+# ----------------
+#  Puerto Rico
+# ----------------
+@Puerto Rico
+9759197
+9759110
+TEC4731
+9758053
+TEC4733
+TEC4735
+9756639
+9755679
+TEC4737
+TEC4739
+9754228
+9753641
+9752695
+TEC4743
+TEC4745
+9752619
+TEC4747
+TEC4749
+9752235
+TEC4741
+TEC4751
+9753216
+9752962
+9755371
+9757809
+9759412
+9759394
+9759421
+9759189
+# ----------------
+#  St. Croix Island
+# ----------------
+@Virgin Islands (US)
+9751364
+9751401
+9751584
+# ----------------
+#  St. Thomas Island
+# ----------------
+@Virgin Islands (US)
+9751774
+9751768
+TEC4759
+9751583
+9751540
+9751639
+9751494
+# ----------------
+#  St. Johns Island
+# ----------------
+@Virgin Islands (US)
+9751467
+9751309
+9751373
+9751381
+TEC4765
+9761115
+# ----------------
+#  Guadeloupe
+# ----------------
+@Guadeloupe
+TEC4769
+# ----------------
+#  Dominica
+# ----------------
+@Dominica
+TEC4771
+# ----------------
+#  Martinique
+# ----------------
+@Martinique
+TEC4773
+# ----------------
+#  St Lucia
+# ----------------
+@St Lucia
+TEC4775
+TEC4777

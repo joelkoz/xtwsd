@@ -2,6 +2,9 @@
 # Station Ids for Bahamas
 # Source: https://tidesandcurrents.noaa.gov/tide_predictions.html?gid=1536
 #
+# @ as first character indicates country code to send to XTide
+#
+@Bahamas
 9710441
 TEC4609
 TEC4611

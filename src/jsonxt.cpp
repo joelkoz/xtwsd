@@ -306,6 +306,8 @@ bool setStationHarmonicsFromJson(json& j, json& status) {
             memset(&rec, 0, sizeof(rec));
         }
 
+        rec.restriction = find_restriction("Public domain");
+
         setString(rec.header.name , sizeof(rec.header.name), j, "name");
         rec.header.record_type = getBool(j, "referenceStation") ? TIDE_RECORD_TYPE::REFERENCE_STATION : TIDE_RECORD_TYPE::SUBORDINATE_STATION;
         rec.header.tzfile = getEnumProperty(j, "timezone", find_tzfile);
