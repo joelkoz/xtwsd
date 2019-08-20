@@ -254,11 +254,15 @@ int convertStation(const string stationId, const char* port) {
                 auto jxtconst = json::array();
                 json& jconst = jharm["HarmonicConstituents"];
                 for (auto& jc : jconst) {
-                    json jxtc;
-                    jxtc["name"] = jc["name"];
-                    jxtc["amp"] = jc["amplitude"];
-                    jxtc["epoch"] = jc["phase_GMT"];
-                    jxtconst += jxtc;
+                    double amp = getNum(jc, "amplitude");
+                    double epoch = getNum(jc, "phase_GMT");
+                    if (amp != 0.0 || epoch != 0.0) {
+                        json jxtc;
+                        jxtc["name"] = jc["name"];
+                        jxtc["amp"] = amp;
+                        jxtc["epoch"] = epoch;
+                        jxtconst += jxtc;
+                    }
                 }
                 jxtharm["constituents"] = jxtconst;
                 jxt["harmonics"] = jxtharm;
