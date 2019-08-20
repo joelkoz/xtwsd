@@ -77,6 +77,10 @@ TEC4697
 TEC4701
 TEC4703
 TEC4705
+# ----------------
+#  Cayman Islands
+# ----------------
+@Cayman Islands
 TEC4707
 # ----------------
 #  Haiti
