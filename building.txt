@@ -2,91 +2,22 @@ Notes on how to obtain and build projects required by xtwsd
 ===========================================================
 
 
-Needed XTide libraries:
-From https://flaterco.com/xtide/files.html
-libtcd
-Resulting include: /usr/local/include/tcd.h
-
-libxtide
-Resulting includes: /usr/local/include/libxtide/*.hh
-
-Needed C++ REST library (restbed)
-From https://github.com/Corvusoft/restbed
-Resulting includes: usr/local/include/corvusoft/restbed/*.hpp
-
-Needed Json library
-From https://github.com/nlohmann/json
-Resulting include: /usr/local/include/nlohmann/json.hpp
-
-
-
-
-Building XTide libraries:
-===========================
-
-Building libtcd:
----------------
-cd /my/project/directories
-tar xvf xtide/libtcd-2.2.7-r2.tar.bz2
-cd libtcd-2.2.7/
-./configure
-make
-sudo make install
-
-
-Building XTide, xttpd, and tide:
---------------------------------
-cd /my/project/directories
-tar xvf xtide/xtide-2.15.2.tar.bz2
-cd xtide-2.15.2/
-
---On Linux/Raspian--
-sudo apt-get install libxaw7-dev
-dpkg -L libxaw7-dev
-./configure --with-xttpd-user=pi --with-xttpd-group=users --enable-systemd
-
---On OS X--
-export CPPFLAGS=-I/opt/X11/include
-export LDFLAGS=-L/opt/X11/lib
-./configure
-
----Either platform---
-make
-sudo make install
-
-
-
-Building boost
+Building Boost
 -------------------------
+Download latest from https://www.boost.org/
+
 cd /my/project/directories
 tar zxvf ~/Downloads/boost_1_70_0.tar.gz
 cd boost_1_70_0
 ./bootstrap.sh -with-libraries=system
 ./b2
 
-
-Building served
---------------------------
-cd /my/project/directories
-tar zxvf ~/Downloads/served-1.6.0.tar.gz
-cd served-1.6.0
-mkdir served.build
-cd served.build
-cmake -Wno-dev -DSERVED_BUILD_STATIC=ON -DSERVED_BUILD_SHARED=OFF -DSERVED_BUILD_TESTS=OFF -DSERVED_BUILD_EXAMPLES=OFF ..
-make
-sudo make install
-
-
-
-
-
-nlohmann::json
-----------------------------------
-The nlohmann::json library is a single include file that is included and compiled
-along with xtwsd.  Simply place the json.hpp file in your global include
-directory:
-/usr/local/include/nlohmann/json.hpp
-
+After installing Boost and running the build process, set the
+system environment variables BOOST_LIBRARYDIR and BOOST_ROOT
+to the appropriate directories.
+Example:
+export BOOST_LIBRARYDIR=/usr/local/boost_1_70_0/libs
+export BOOST_ROOT=/usr/local/boost_1_70_0
 
 
 
@@ -96,5 +27,11 @@ cd /my/project/directories
 git clone --recursive https://github.com/joelkoz/xtwsd.git
 mkdir xtwsd/build
 cd xtwsd/build
-cmake ..
+
+On Mac OS X----
+cmake -Wno-dev -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl ..
+-----Linux---
+cmake -Wno-dev ..
+------------
+
 make install

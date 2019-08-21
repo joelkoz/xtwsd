@@ -15,8 +15,7 @@ Features
 
 Requirements
 ------------
-Compiling xtwsd requires the development environments of following open source projects to exist on your machine. This usually means
-downloading and building them from source.
+xtwsd is written in C++ versoin 11 and is compiled with CMake and has the following dependencies:
 
 | Project |  Description | Source code |
 |---------|----------|-------------|
@@ -27,12 +26,57 @@ downloading and building them from source.
 | boost | C++ library used by served | https://www.boost.org/ |
 | openssl | SSL library needed by nos2xt utility | https://www.openssl.org/source/ |
 
+Most of the above projects will be automatically downloaded and built as part of the checkout and build process.  The one exception
+being the "Boost" library (which is a dependency of both served as well as the nos2xt utility described later). Boost version 1.70.0
+or greater is required.
+
 
 Building
 ----------
-After installing and building the development builds of the above mentioned projects, you build xtwsd using CMake. See the file
-building.txt for help building the various source projects.
+If you don't already have the Boost library installed in your development environment, download the latest code from https://www.boost.org/
+and build the "system" library using the following commands:
 
+```
+cd /my/projects
+tar zxvf boost_1_70_0.tar.gz
+cd boost_1_70_0
+./bootstrap.sh -with-libraries=system
+./b2
+```
+
+By convention, Boost development requires the environment variables **BOOST_ROOT** and **BOOST_LIBRARYDIR** to be set.  Set those
+to values appropriate for your system.  Here is an example, though your directories may be different:
+
+```
+export BOOST_LIBRARYDIR=/usr/local/boost_1_70_0/libs
+export BOOST_ROOT=/usr/local/boost_1_70_0
+```
+
+
+Once Boost is built, you can download and build xtwsd with the following commands:
+
+```
+cd /my/projects
+git clone --recursive https://github.com/joelkoz/xtwsd.git
+mkdir xtwsd/build
+cd xtwsd/build
+```
+
+On most Linux environments, you configure the build with the following:
+```
+cmake -Wno-dev ..
+```
+
+On Mac OS X, issue the following instead:
+```
+cmake -Wno-dev -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl ..
+```
+
+
+Once CMake has configured your build environment, you can build the system with a simple *make* command:
+```
+make
+```
 
 
 Running
@@ -54,6 +98,16 @@ public web service maintained by NOAA and make web service calls
 to your local xtwsd server to add those additional stations.  That code also serves as a good example on how to
 use the xtwsd services for adding new data to the server using data you may find in other locations.
 
+As an example, the following command can be run from the "build" directory to add missing Carribean tide stations:
+
+```
+./nos2xt -f ../src/util/caribbean.txt -p 8080
+```
+
+
+KNOWN BUG:
+There seems to be an issue with doing "updates" to existing tide prediction data records. The crash occurs somewhere inside the libtcd library of XTide. The data seems to be saved, the the xtwsd server crashes. Restarting it seems to work.  Adding NEW tide
+prediction records seems to work find.
 
 
 Station Index vs. Station Id
