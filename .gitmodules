@@ -1,0 +1,6 @@
+[submodule "dependencies/served/served"]
+	path = dependencies/served/served
+	url = https://github.com/meltwater/served.git
+[submodule "dependencies/nlohmann_json/json"]
+	path = dependencies/nlohmann_json/json
+	url = https://github.com/nlohmann/json.git
