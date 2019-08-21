@@ -104,10 +104,12 @@ As an example, the following command can be run from the "build" directory to ad
 ./nos2xt -f ../src/util/caribbean.txt -p 8080
 ```
 
+Type ```nos2xt``` with no parameters to see the options available to you.
 
 KNOWN BUG:
 There seems to be an issue with doing "updates" to existing tide prediction data records. The crash occurs somewhere inside the libtcd library of XTide. The data seems to be saved, the the xtwsd server crashes. Restarting it seems to work.  Adding NEW tide
-prediction records seems to work find.
+prediction records seems to work fine.  For this reason, the default behavior of nos2xt is to skip tide stations that
+are already in the harmonics database.  You can override this behavior with the "-u" option.  
 
 
 Station Index vs. Station Id
