@@ -85,6 +85,7 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 # nlohmann_json
 add_subdirectory(dependencies/nlohmann_json)
 
+FIND_PACKAGE(Threads)
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 message("Include dirs used in for compiling:")
@@ -101,7 +102,7 @@ IF (BUILD_SERVER)
   INCLUDE_DIRECTORIES(dependencies/served/served/src)
   file(GLOB SERVER_SOURCES "src/*.cpp")
   add_executable(xtwsd ${SERVER_SOURCES})
-  target_link_libraries(xtwsd libtcd libxtide served ${Boost_SYSTEM_LIBRARY} ${PNG_LIBRARIES} nlohmann_json::nlohmann_json)
+  target_link_libraries(xtwsd libtcd libxtide served ${CMAKE_THREAD_LIBS_INIT} ${Boost_SYSTEM_LIBRARY} ${PNG_LIBRARIES} nlohmann_json::nlohmann_json)
   install(TARGETS xtwsd DESTINATION bin)
 ENDIF (BUILD_SERVER)
 
@@ -114,7 +115,7 @@ IF (BUILD_CLIENT)
 
   file(GLOB CLIENT_SOURCES "src/util/*.cpp")
   add_executable(nos2xt ${CLIENT_SOURCES})
-  target_link_libraries(nos2xt ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${Boost_SYSTEM_LIBRARY} nlohmann_json::nlohmann_json)
+  target_link_libraries(nos2xt ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${Boost_SYSTEM_LIBRARY} nlohmann_json::nlohmann_json)
   install(TARGETS nos2xt DESTINATION bin)
 ENDIF (BUILD_CLIENT)
 
