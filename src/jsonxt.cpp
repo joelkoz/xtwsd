@@ -7,7 +7,7 @@
 
 using namespace std;
 using namespace libxtide;
-using json = nlohmann::json;
+#include "json_fifo.h"
 
 
 void tojson(libxtide::Coordinates coord, json& j) {
