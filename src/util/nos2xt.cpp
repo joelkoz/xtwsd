@@ -41,7 +41,7 @@
 
 #include "../jutil.hpp"
 
-using json = nlohmann::json;
+#include "../json_fifo.h"
 
 
 using namespace std;

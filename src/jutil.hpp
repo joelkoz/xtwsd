@@ -7,10 +7,9 @@
 // Joel Kozikowski
 
 
-#include <nlohmann/json.hpp>
+#include "json_fifo.h"
 
-
-void setString(char* str, int strSize, nlohmann::json& j, const char* propertyName) {
+void setString(char* str, int strSize, json& j, const char* propertyName) {
     if (j.count(propertyName)) {
         strncpy(str, j[propertyName].get<std::string>().c_str(), strSize);
         // Guarantee str is zero terminated...
@@ -22,7 +21,7 @@ void setString(char* str, int strSize, nlohmann::json& j, const char* propertyNa
 }
 
 
-int getInt(nlohmann::json& j, const char* propertyName) {
+int getInt(json& j, const char* propertyName) {
 
     if (j.count(propertyName) && j[propertyName].is_number()) {
         return j[propertyName].get<int>();
@@ -34,7 +33,7 @@ int getInt(nlohmann::json& j, const char* propertyName) {
 }
 
 
-double getNum(nlohmann::json& j, const char* propertyName) {
+double getNum(json& j, const char* propertyName) {
 
     if (j.count(propertyName) &&  j[propertyName].is_number()) {
         return j[propertyName].get<double>();
@@ -46,7 +45,7 @@ double getNum(nlohmann::json& j, const char* propertyName) {
 }
 
 
-bool getBool(nlohmann::json& j, const char* propertyName) {
+bool getBool(json& j, const char* propertyName) {
 
     if (j.count(propertyName) &&  j[propertyName].is_boolean()) {
         return j[propertyName].get<bool>();
@@ -57,7 +56,7 @@ bool getBool(nlohmann::json& j, const char* propertyName) {
 }
 
 
-std::string getStr(nlohmann::json& j, const char* propertyName) {
+std::string getStr(json& j, const char* propertyName) {
 
     if (j.count(propertyName)) {
         return j[propertyName].get<std::string>();

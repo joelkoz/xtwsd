@@ -84,6 +84,8 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 # nlohmann_json
 add_subdirectory(dependencies/nlohmann_json)
+add_subdirectory(dependencies/fifo_map)
+INCLUDE_DIRECTORIES(dependencies/fifo_map/fifo_map/src)
 
 FIND_PACKAGE(Threads)
 

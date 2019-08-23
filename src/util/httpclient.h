@@ -8,7 +8,7 @@
 
 #include <string>
 #include <boost/beast/http.hpp>
-#include <nlohmann/json.hpp>
+#include "../json_fifo.h"
 
 
 class HttpClient {
@@ -47,7 +47,7 @@ class HttpClient {
                /**
                 * Converts the body of this response into a json object 
                 */
-               nlohmann::json asJson();
+               json asJson();
         };
 
         HttpClient(const char* host, const char* protocol = "http", const char* port = NULL);
@@ -74,7 +74,7 @@ class HttpClient {
          * request.  The content type header is set to "application/json" before the post
          * is made.
          */
-        std::shared_ptr<Response> post(const std::string& path, const nlohmann::json& body);
+        std::shared_ptr<Response> post(const std::string& path, const json& body);
 
 
         /**

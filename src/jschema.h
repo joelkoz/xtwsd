@@ -2,7 +2,7 @@
 #define _jschema_H
 
 #include <memory>
-#include <nlohmann/json.hpp>
+#include "json_fifo.h"
 
 /**
   * jschema.h
@@ -40,7 +40,7 @@
  * in the jsonxt.h module.  If the XTide data file can not be opened, the passed
  * object will remain unchanged.
  */
-extern void getJsonSchema(nlohmann::json& schema);
+extern void getJsonSchema(json& schema);
 
 
 #endif

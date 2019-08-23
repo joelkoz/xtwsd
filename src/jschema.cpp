@@ -3,7 +3,7 @@
 #include <tcd.h>
 
 using namespace libxtide;
-using json = nlohmann::json;
+
 
 json& addProperty(json& parent, const char* propertyName, const char* type,  const char* description = NULL) {
 

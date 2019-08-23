@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace libxtide;
-using json = nlohmann::json;
+#include "json_fifo.h"
 
 /**
   * main.cpp

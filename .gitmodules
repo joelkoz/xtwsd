@@ -4,3 +4,6 @@
 [submodule "dependencies/nlohmann_json/json"]
 	path = dependencies/nlohmann_json/json
 	url = https://github.com/nlohmann/json.git
+[submodule "dependencies/fifo_map/fifo_map"]
+	path = dependencies/fifo_map/fifo_map
+	url = https://github.com/nlohmann/fifo_map.git
