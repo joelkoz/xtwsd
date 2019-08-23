@@ -60,8 +60,8 @@ string HttpClient::Response::getBody() {
 }
 
 
-nlohmann::json HttpClient::Response::asJson() {
-   return nlohmann::json::parse(this->getBody());
+json HttpClient::Response::asJson() {
+   return json::parse(this->getBody());
 }
 
 
@@ -104,7 +104,7 @@ std::shared_ptr<HttpClient::Response> HttpClient::post(const string& path, const
 }
 
 
-std::shared_ptr<HttpClient::Response> HttpClient::post(const string& path, const nlohmann::json& body) {
+std::shared_ptr<HttpClient::Response> HttpClient::post(const string& path, const json& body) {
     setRequestHeader(http::field::content_type, "application/json");
     return post(path, body.dump());
 }

@@ -2,7 +2,7 @@
 #define _jsonxt_H_
 
 #include <memory>
-#include <nlohmann/json.hpp>
+#include "json_fifo.h"
 
 #include "_libxtide.h"
 
@@ -38,7 +38,7 @@
  * Sets the lat and long properies of j to
  * the specified coordinates.
  */
-extern void tojson(libxtide::Coordinates coord, nlohmann::json& j);
+extern void tojson(libxtide::Coordinates coord, json& j);
 
 
 
@@ -46,7 +46,7 @@ extern void tojson(libxtide::Coordinates coord, nlohmann::json& j);
  * Populates the json member j.position with the
  * specified coordinates.
  */
-extern void setPosition(libxtide::Coordinates coord, nlohmann::json& j);
+extern void setPosition(libxtide::Coordinates coord, json& j);
 
 
 
@@ -54,14 +54,14 @@ extern void setPosition(libxtide::Coordinates coord, nlohmann::json& j);
  * Populates the json object j with data from
  * the station reference pRef.
  */
-extern void tojson(libxtide::StationRef* pRef, nlohmann::json& j);
+extern void tojson(libxtide::StationRef* pRef, json& j);
 
 
 /**
  * Populates the json object j with data from
  * the station pStat.
  */
-extern void tojson(libxtide::Station* pStat, libxtide::StationRef* pRef, nlohmann::json& j);
+extern void tojson(libxtide::Station* pStat, libxtide::StationRef* pRef, json& j);
 
 
 
@@ -69,7 +69,7 @@ extern void tojson(libxtide::Station* pStat, libxtide::StationRef* pRef, nlohman
  * Populates the specified json object with
  * event data from TideEvent
  */
-extern void tojson(libxtide::TideEvent& event, nlohmann::json& j);
+extern void tojson(libxtide::TideEvent& event, json& j);
 
 
 
@@ -78,7 +78,7 @@ extern void tojson(libxtide::TideEvent& event, nlohmann::json& j);
  * tide events specified in eventList;
  */
 
-extern void setEvents(libxtide::TideEventsOrganizer& eventList, nlohmann::json& j, Dstr* pTimeZone);
+extern void setEvents(libxtide::TideEventsOrganizer& eventList, json& j, Dstr* pTimeZone);
 
 
 
@@ -87,7 +87,7 @@ extern void setEvents(libxtide::TideEventsOrganizer& eventList, nlohmann::json& 
  * Returns a populated json object with the tide or current prediction harmonics
  * data for the specified station Id.
  */
-extern void getStationHarmonicsAsJson(int stationId, nlohmann::json& j);
+extern void getStationHarmonicsAsJson(int stationId, json& j);
 
 
 
@@ -96,6 +96,6 @@ extern void getStationHarmonicsAsJson(int stationId, nlohmann::json& j);
  * definition stored in j.  TRUE is returned if the write was successful.  status
  * will be populated with a return code and a message string.
  */
-extern bool setStationHarmonicsFromJson(nlohmann::json& j, nlohmann::json& status);
+extern bool setStationHarmonicsFromJson(json& j, json& status);
 
 #endif
