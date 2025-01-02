@@ -270,3 +270,9 @@ Example
 ```
 http://127.0.0.1:8080/tcd
 ```
+
+---
+### Do you find my work useful?
+
+<a href="https://www.buymeacoffee.com/joelkoz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+---
